@@ -1,25 +1,21 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:5.7
-    container_name: mysql_c_dc
+
+  mongo:
+    image: mongo
     restart: always
-    volumes:
-      - db-volume:/var/lib/mysql
-      - ./article.sql:/docker-entrypoint-initdb.d/article.sql
     environment:
-      MYSQL_ROOT_PASSWORD: test
-      MYSQL_DATABASE: test
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
-  app:
-    image: mysql_lamp
-    container_name: myapp_c_dc
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  mongo-express:
+    image: mongo-express
     restart: always
-    volumes:
-      - ./app:/var/www/html
     ports:
-      - 8080:80
-    depends_on:
-      - db
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
